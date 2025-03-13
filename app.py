@@ -1,7 +1,11 @@
+import os
 from flask import Flask, jsonify
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     "X-IG-App-ID": "936619743392459"
@@ -13,7 +17,7 @@ fetch_profile = lambda username: requests.get(
     params={"username": username}
 )
 
-@app.route('/<username>', methods=['GET'])
+@app.route('/starexx/<username>', methods=['GET'])
 def profile(username):
     response = fetch_profile(username)
     
@@ -56,4 +60,4 @@ def profile(username):
         return jsonify({"error": "Failed to parse response"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=int(os.getenv("PORT", 5000)))
