@@ -1,30 +1,34 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 
 app = Flask(__name__)
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     "X-IG-App-ID": "936619743392459"
 }
 
-fetch_profile = lambda username: requests.get(
-    "https://i.instagram.com/api/v1/users/web_profile_info/",
-    headers=HEADERS,
-    params={"username": username}
-)
+def fetch_profile(username):
+    url = f"https://i.instagram.com/api/v1/users/web_profile_info/?username={username}"
+    response = requests.get(url, headers=HEADERS)
+    return response
 
-@app.route('/<username>', methods=['GET'])
-def profile(username):
+@app.route('/profile', methods=['GET'])
+def profile():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username parameter is required"}), 400
+    
     response = fetch_profile(username)
     
     if response.status_code != 200:
-        return jsonify({"error": "Failed to fetch data", "status_code": response.status_code})
+        return jsonify({"error": "Failed to fetch data", "status_code": response.status_code}), 500
     
     try:
         data = response.json().get("data", {}).get("user", {})
         if not data:
-            return jsonify({"error": "User not found"})
-        
+            return jsonify({"error": "User not found"}), 404
+
         posts = [
             {
                 "Post ID": post["node"]["id"],
@@ -52,8 +56,8 @@ def profile(username):
             },
             "Recent Posts": posts
         })
-    except:
-        return jsonify({"error": "Failed to parse response"})
+    except Exception as e:
+        return jsonify({"error": "Failed to parse response", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
