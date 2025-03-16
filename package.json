@@ -1,11 +1,9 @@
 {
-  "name": "starexx-file-server",
+  "name": "myweb",
   "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "main": "api/index.js",
   "dependencies": {
-    "express": "^4.18.2"
+    "fs": "latest",
+    "path": "latest"
   }
 }
