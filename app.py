@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template_string
 import requests
 
 app = Flask(__name__)
-key = "YOUTUBE-API-KEY"
+key = "AIzaSyDccEplQn-vC_-ON69HmhEW58MDEaNoBNA"
 
 def get_channel_id_from_username(username):
     url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q={username}&key={key}"
