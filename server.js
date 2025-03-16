@@ -6,13 +6,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const FILE_DIR = path.join(__dirname, "src", "components");
 
-// Home Route - JSON Response
+app.use(express.static("public"));
+
+// Home Route - Serve index.html
 app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// API Route - JSON Response
+app.get("/api/files", (req, res) => {
     fs.readdir(FILE_DIR, (err, files) => {
         if (err) return res.status(500).json({ error: "Internal Server Error" });
 
         let fileList = files.map((file, index) => ({
-            [index + 1]: `https://starexxx.vercel.app/${file}/`
+            [index + 1]: `https://starexxx.vercel.app/${path.parse(file).name}/`
         }));
 
         res.json({ Starexx: fileList });
@@ -22,9 +29,10 @@ app.get("/", (req, res) => {
 // Raw File Access Route
 app.get("/:filename", (req, res) => {
     let requestedFile = req.params.filename;
+    let matchedFile = fs.readdirSync(FILE_DIR).find(file => path.parse(file).name === requestedFile);
 
-    let filePath = path.join(FILE_DIR, requestedFile);
-    if (fs.existsSync(filePath)) {
+    if (matchedFile) {
+        let filePath = path.join(FILE_DIR, matchedFile);
         res.setHeader("Content-Type", "text/plain");
         fs.createReadStream(filePath).pipe(res);
     } else {
