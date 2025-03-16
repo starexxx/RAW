@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Manager</title>
+    <title>Starexx Labs</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>File List</h1>
+
+    <h1>Starexx Labs</h1>
     <table>
-        <tr>
-            <th>#</th>
-            <th>File Name</th>
-        </tr>
-        <% files.forEach(file => { %>
+        <thead>
             <tr>
-                <td><%= file.number %></td>
-                <td><a href="/app/<%= encodeURIComponent(file.name) %>"><%= file.name %></a></td>
+                <th>Uploads</th>
             </tr>
-        <% }); %>
+        </thead>
+        <tbody>
+            <% files.forEach(file => { %>
+                <tr onclick="window.location.href='/app/<%= encodeURIComponent(file.name) %>'">
+                    <td><%= file.number %></td>
+                    <td><a href="/app/<%= encodeURIComponent(file.name) %>" class="filename" data-name="<%= file.name.replace(/\.[^/.]+$/, '') %>"></a></td>
+                </tr>
+            <% }) %>
+        </tbody>
     </table>
-    <script src="/script.js"></script>
+
 </body>
 </html>
