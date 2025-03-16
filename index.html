@@ -48,7 +48,7 @@
 
         async function fetchFileContent(fileName) {
             try {
-                let response = await fetch(`/${fileName}`);
+                let response = await fetch(`/files/${fileName}`);
                 let content = await response.text();
                 document.getElementById('file-content').textContent = content;
             } catch (error) {
