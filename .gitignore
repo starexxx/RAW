@@ -1,6 +1,0 @@
-node_modules/
-.env
-.DS_Store
-.vscode/
-vercel.json
-package-lock.json
