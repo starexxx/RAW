@@ -3,12 +3,17 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const FILES_DIR = "files";
+const FILES_DIR = path.join(__dirname, "files");
 const BASE_URL = "https://starexxx.vercel.app";
+
+if (!fs.existsSync(FILES_DIR)) {
+    fs.mkdirSync(FILES_DIR, { recursive: true });
+}
 
 app.get("/", (req, res) => {
     fs.readdir(FILES_DIR, (err, files) => {
         if (err) {
+            console.error("Directory Read Error:", err);
             res.set("X-Title", "Error");
             return res.status(500).json({ error: "Internal Server Error" });
         }
@@ -33,6 +38,7 @@ app.get("/:filename/", (req, res) => {
 
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
+            console.error("File Read Error:", err);
             res.set("X-Title", "Error Reading File");
             return res.status(500).json({ error: "Error reading file" });
         }
@@ -45,7 +51,4 @@ app.use((req, res) => {
     res.set("X-Title", "Redirecting...");
     res.redirect("/");
 });
-
-app.listen(8000, () => {
-    console.log("Server is running on http://0.0.0.0:8000");
-});
+module.exports = app;
