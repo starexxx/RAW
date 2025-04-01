@@ -5,7 +5,7 @@ A simple Node.js and Express file server that lists files and serves them via UR
 ---
 
 ## Features  
-- Lists all files inside the `/files` directory  
+- Lists all files inside the `/src/components` directory  
 - Generates direct URLs for each file  
 - Reads and serves text files  
 - Supports automatic deployment on Vercel  
