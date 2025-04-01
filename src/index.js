@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const FILES_DIR = path.join(__dirname, "src/components");
+const FILES_DIR = path.join(__dirname, "components");
 const BASE_URL = "https://starexxx.vercel.app";
 
 if (!fs.existsSync(FILES_DIR)) {
